@@ -409,8 +409,38 @@ ORDER BY COALESCE(P.product_name, 'Unknown Product')
 
 -- Day 18
 -- Q1: Employee–manager pairs.
+SELECT  EMP.first_name+' '+EMP.last_name    AS EMP_NAME,
+        MGR.first_name+' '+MGR.last_name    AS MANAGER_NAME
+FROM [dbo].[Employees]      AS EMP
+LEFT JOIN [dbo].[Employees] AS MGR
+    ON EMP.manager_id = MGR.emp_id
+ORDER BY EMP.first_name,
+         EMP.last_name
+
 -- Q2: Employees who manage others.
+SELECT  DISTINCT MGR.emp_id,
+        MGR.first_name+' '+MGR.last_name    AS MANAGER_NAME     
+FROM [dbo].[Employees]          AS EMP
+INNER JOIN [dbo].[Employees]    AS MGR
+    ON EMP.manager_id = MGR.emp_id
+ORDER BY MGR.emp_id
+
+
+SELECT  
+        MGR.first_name+' '+MGR.last_name    AS MANAGER_NAME,
+        EMP.first_name+' '+EMP.last_name    AS EMP_NAME
+FROM [dbo].[Employees]      AS MGR
+inner JOIN  [dbo].[Employees]      AS EMP
+    ON   MGR.emp_id = EMP.manager_id
+ORDER BY EMP.first_name,
+         EMP.last_name
+
 -- Q3: Employees sorted by manager_id.
+SELECT  EMP.emp_id                          AS EMP_ID,
+        EMP.first_name+' '+EMP.last_name    AS EMP_NAME,
+        EMP.manager_id
+FROM [dbo].[Employees]      AS EMP
+ORDER BY EMP.manager_id DESC ;  
 
 -- Day 19
 -- Q1: Total revenue per customer.
