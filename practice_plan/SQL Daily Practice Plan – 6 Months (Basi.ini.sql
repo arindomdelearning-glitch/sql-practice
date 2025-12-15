@@ -444,8 +444,31 @@ ORDER BY EMP.manager_id DESC ;
 
 -- Day 19
 -- Q1: Total revenue per customer.
+SELECT CUST.customer_name       AS CUSTOMER_NAME,
+       SUM(ORD.total_amount)    AS REVENUE
+FROM [dbo].[Customers]      AS CUST 
+INNER JOIN [dbo].[Orders]   AS ORD
+    ON CUST.customer_id = ORD.customer_id
+GROUP BY CUST.customer_name
+ORDER BY CUST.customer_name
+
 -- Q2: Total salary per department.
+SELECT  DEPT.dept_name           AS DEPARTMENT,
+        SUM(EMP.salary)          AS TOTAL_SALARY
+FROM [dbo].[Employees]          AS EMP 
+INNER JOIN [dbo].[Departments]  AS DEPT 
+    ON EMP.dept_id  = DEPT.dept_id
+GROUP BY DEPT.dept_name
+ORDER BY DEPT.dept_name
+
 -- Q3: Total quantity sold per product.
+SELECT P.product_name           AS PRODUCT_NAME,
+       SUM(ORDI.quantity)       AS TOTAL_QUANTITY
+FROM [dbo].[Products]           AS P
+INNER JOIN [dbo].[OrderItems]   AS ORDI
+    ON P.product_id = ORDI.product_id
+GROUP BY P.product_name
+ORDER BY P.product_name
 
 -- Day 20
 -- Q1: Customers with total spending > 2000.
