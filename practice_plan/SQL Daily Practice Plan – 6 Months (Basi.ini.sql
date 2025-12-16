@@ -472,8 +472,38 @@ ORDER BY P.product_name
 
 -- Day 20
 -- Q1: Customers with total spending > 2000.
+SELECT CUST.customer_name       AS CUSTOMER_NAME,
+       SUM(ORD.total_amount)    AS TOTAL_SPENDING
+FROM [dbo].[Customers]      AS CUST 
+INNER JOIN [dbo].[Orders]   as ORD  
+    ON CUST.customer_id = ORD.customer_id
+GROUP BY CUST.customer_id, 
+         CUST.customer_name
+        having SUM(ORD.total_amount) > 2000
+ORDER BY TOTAL_SPENDING DESC
+
 -- Q2: Departments with more than 2 employees.
+
+SELECT DEPT.dept_name               AS DEPARTMENT_NAME,
+       COUNT(EMP.emp_id)            AS EMP_COUNT
+FROM [dbo].[Employees]              AS EMP 
+INNER JOIN [dbo].[Departments]      AS DEPT 
+    ON EMP.dept_id = DEPT.dept_id
+GROUP BY dept_name
+    HAVING COUNT(emp_id) > 2
+ORDER BY EMP_COUNT DESC
+
 -- Q3: Products sold more than 10 units.
+
+SELECT P.product_name           AS PRODUCT_NAME,
+       SUM(ORDI.quantity)       AS TOTAL_QUANTITY
+FROM [dbo].[Products]           AS P  
+INNER JOIN [dbo].[OrderItems]   AS ORDI 
+    ON P.product_id = ORDI.product_id
+GROUP BY P.product_id,
+         P.product_name
+    HAVING SUM(ORDI.quantity) > 10
+ORDER BY TOTAL_QUANTITY DESC
 
 -- Day 21
 -- Q1: Customers with latest order date.
