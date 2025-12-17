@@ -507,8 +507,36 @@ ORDER BY TOTAL_QUANTITY DESC
 
 -- Day 21
 -- Q1: Customers with latest order date.
+
+SELECT CUST.customer_name                    AS CUSTOMER_NAME,
+       MAX(CAST(ORD.order_date AS DATE))     AS LATEST_ORDER_DATE
+FROM [dbo].[Customers]          AS CUST 
+INNER JOIN [dbo].[Orders]       as ORD  
+    ON CUST.customer_id = ORD.customer_id
+GROUP BY CUST.customer_name
+ORDER BY LATEST_ORDER_DATE DESC
+
 -- Q2: Products with total quantity sold (including zero).
+
+SELECT P.product_name                      AS PRODUCT_NAME,
+       ISNULL(SUM(ORDI.quantity), 0)       AS TOTAL_QUANTITY
+FROM [dbo].[Products]           AS P
+LEFT JOIN [dbo].[OrderItems]   AS ORDI 
+    ON P.product_id = ORDI.product_id
+GROUP BY P.product_name
+ORDER BY TOTAL_QUANTITY DESC
+
 -- Q3: Departments with employee count and avg salary.
+
+SELECT DEPT.dept_name           AS DEPART_NAME,
+       COUNT(emp_id)            AS EMPLOYEE_COUNT,
+       AVG(EMP.salary)          AS AVERAGE_SALARY
+FROM [dbo].[Employees]          AS EMP 
+INNER JOIN [dbo].[Departments]  AS DEPT 
+    ON EMP.dept_id = DEPT.dept_id
+GROUP BY DEPT.dept_id,
+         DEPT.dept_name
+ORDER BY EMPLOYEE_COUNT DESC
 
 -- Day 22
 -- Q1: First 3 letters of product_name.
