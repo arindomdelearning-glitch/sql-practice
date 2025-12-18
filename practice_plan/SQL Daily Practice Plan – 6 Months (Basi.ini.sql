@@ -540,8 +540,19 @@ ORDER BY EMPLOYEE_COUNT DESC
 
 -- Day 22
 -- Q1: First 3 letters of product_name.
+
+SELECT substring(P.product_name, 1, 3)      AS PRODCT_PREFIX
+FROM [dbo].[Products]       AS P  
+ORDER BY P.product_name
+
 -- Q2: TRIM a sample text field.
+
+SELECT LTRIM(RTRIM(' Sample text field '))      AS TRIMED_TEST
+
 -- Q3: Extract domain from sample email.
+
+SELECT SUBSTRING(EMAIL, CHARINDEX('@', EMAIL) + 1, LEN(EMAIL)) AS FOMAIN
+FROM (SELECT 'arindomm1990@gmail.com' AS EMAIL) T
 
 -- Day 23
 -- Q1: Orders placed in last 30 days.
