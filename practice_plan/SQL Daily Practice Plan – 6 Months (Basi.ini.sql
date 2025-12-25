@@ -556,13 +556,59 @@ FROM (SELECT 'arindomm1990@gmail.com' AS EMAIL) T
 
 -- Day 23
 -- Q1: Orders placed in last 30 days.
+
+SELECT  ORD.order_id,
+        ORD.customer_id,
+        ORD.order_date
+FROM [dbo].[Orders]     AS ORD  
+WHERE ORD.order_date >= DATEADD(DAY, -30, GETDATE())
+
 -- Q2: Extract month from order_date.
+
+SELECT ORD.customer_id          AS ORDER_ID,
+       MONTH(ORD.order_date)    AS ORDER_MONTH
+FROM [dbo].[Orders]     AS ORD
+
 -- Q3: Employees hired in 2020.
 
+SELECT EMP.first_name+' '+EMP.last_name    AS EMP_NAME,
+       EMP.hire_date                       AS HIRE_DATE
+FROM [dbo].[Employees]          AS EMP
+WHERE YEAR(EMP.hire_date) = 2020
 -- Day 24
 -- Q1: Salary category using CASE.
+
+SELECT EMP.first_name+' '+EMP.last_name    AS EMP_NAME,
+       EMP.salary                          AS SALARY,
+    CASE 
+       WHEN EMP.salary < 50000  THEN 'NORMAL RANGE'
+       WHEN EMP.salary BETWEEN 50001 AND 75000  THEN 'MID RANGE'
+       ELSE 'HIGH RANGE' 
+       END                  AS SALARY_CATAGORY
+FROM [dbo].[Employees]      AS EMP
+ORDER BY EMP.salary DESC
+
 -- Q2: Order amount bucket (Small/Medium/Large).
+
+SELECT ORD.order_id,
+       ORD.total_amount     AS ORDER_AMOUNT,
+       CASE 
+       WHEN ORD.total_amount < 500 THEN 'Small'
+       WHEN ORD.total_amount BETWEEN 500 AND 1500 THEN 'Medium'
+       ELSE 'Large'
+       end                  AS AMOUNT_BUCKET
+FROM [dbo].[Orders]         AS ORD  
+ORDER BY ORD.total_amount desc
+
 -- Q3: Product category: Expensive/Normal.
+
+SELECT P.product_id             AS PRODUCT_ID,
+       P.unit_price             AS UNIT_PRICE,
+       CASE 
+       WHEN P.unit_price > 500 THEN 'Expensive'
+       ELSE 'Normal'
+       END AS PRODUCT_CAT
+FROM [dbo].[Products]           AS P
 
 -- Day 25
 -- Q1: Replace NULL manager_id with 0.
