@@ -612,8 +612,25 @@ FROM [dbo].[Products]           AS P
 
 -- Day 25
 -- Q1: Replace NULL manager_id with 0.
+
+SELECT EMP.first_name+' '+EMP.last_name     AS EMP_NAME,
+      ISNULL(EMP.manager_id, 0)             AS MANAGER_ID
+FROM [dbo].[Employees]      AS EMP 
+ORDER BY EMP.manager_id 
+
 -- Q2: Replace NULL total_amount with 0.
+
+SELECT ORD.order_id                 AS ORDER_ID,
+       ISNULL(ORD.total_amount, 0)  AS TOTAL_AMOUNT
+FROM [dbo].[Orders]     AS ORD
+ORDER BY TOTAL_AMOUNT desc
+
 -- Q3: Identify customers with NULL signup_date.
+
+SELECT CUST.customer_name   AS CUSTOMER_NAME,
+       CUST.signup_date     AS SIGNUP_DATE
+FROM [dbo].[Customers]      AS CUST
+WHERE CUST.signup_date IS NULL
 
 -- Day 26
 -- Q1: Combine UPPER + SUBSTRING on product_name.
