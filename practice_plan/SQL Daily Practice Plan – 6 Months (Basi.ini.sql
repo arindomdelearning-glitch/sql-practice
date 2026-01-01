@@ -634,13 +634,78 @@ WHERE CUST.signup_date IS NULL
 
 -- Day 26
 -- Q1: Combine UPPER + SUBSTRING on product_name.
+
+SELECT UPPER(SUBSTRING(P.product_name, 1, 3))    AS PRODUCT_NAME
+FROM [dbo].[Products]           AS P
+
 -- Q2: Format full_name using CONCAT and LOWER.
+
+SELECT LOWER(CONCAT(EMP.first_name, ' ', EMP.last_name))     AS FULL_NAME
+FROM [dbo].[employees]      AS EMP
+
 -- Q3: Years of service for employees.
+
+SELECT CONCAT(EMP.first_name, ' ', EMP.last_name)     AS FULL_NAME,
+       DATEDIFF(YEAR, EMP.hire_date, GETDATE())       AS YEAR_IN_SERVICE   
+FROM [dbo].[employees]      AS EMP
 
 -- Day 27
 -- Q1: Employees earning > avg salary.
+
+SELECT CONCAT(EMP1.first_name, ' ', EMP1.last_name)     AS FULL_NAME,
+       EMP1.Salary          AS SALARY_GRT_THAN_AVG
+FROM [dbo].[employees]      AS EMP1
+WHERE EMP1.Salary >
+    (
+        SELECT AVG(EMP.SALARY)
+        FROM [dbo].[employees]      AS EMP
+    )
+
 -- Q2: Customers with spending > avg spending.
+
+--Situation 1 when requirement is order amount as part of spending
+
+SELECT CUST.customer_name       AS CUSTOMER_NAME,
+       ORD1.total_amount        AS SPEND_GRT_THAN_AVG
+FROM [dbo].[orders]             AS ORD1
+INNER JOIN [dbo].[customers]    AS CUST
+    ON ORD1.customer_id = CUST.customer_id
+WHERE ORD1.total_amount >
+    (
+        SELECT avg(ORD.total_amount)    
+        FROM [dbo].[orders]     AS ORD
+    )
+
+--Situation 2 when the requirement is total customer spending
+SELECT CUST.customer_name       AS CUSTOMER_NAME,
+       SUM(ORD1.total_amount)   AS TOTAL_SPENDING_GRT_TAN_AVG
+FROM [dbo].[customers]          AS CUST
+INNER JOIN [dbo].[Orders]       AS ORD1
+    ON CUST.customer_id = ORD1.customer_id
+GROUP BY CUST.customer_name
+HAVING SUM(ORD1.total_amount) >
+    (
+        SELECT AVG(R.TOTAL_SPENDING)    AS AVG_SPENDING
+        FROM 
+        (
+                SELECT SUM(ORD.total_amount)    AS TOTAL_SPENDING
+            FROM [dbo].[Orders]     AS ORD
+            GROUP BY ORD.customer_id
+        ) R
+    )
+ORDER BY TOTAL_SPENDING_GRT_TAN_AVG DESC
+
+
 -- Q3: Products priced > avg price.
+SELECT P1.product_name      AS PRODUCT_NAME,
+       P1.unit_price        AS PRICE_GRT_THAN_AVG
+FROM [dbo].[Products]   AS P1
+WHERE P1.unit_price >
+    (
+        SELECT AVG(P.unit_price)    
+        FROM [dbo].[Products]   AS P
+    )
+
 
 -- Day 28
 -- Q1: Customers with order_count column.
