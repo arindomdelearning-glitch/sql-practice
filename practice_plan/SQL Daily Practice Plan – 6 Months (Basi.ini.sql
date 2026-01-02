@@ -706,11 +706,41 @@ WHERE P1.unit_price >
         FROM [dbo].[Products]   AS P
     )
 
-
 -- Day 28
 -- Q1: Customers with order_count column.
+
+SELECT CUST.CUSTOMER_NAME       AS CUSTOMER_NAME,
+       COUNT(ORDI.QUANTITY)     AS ORDER_COUNT
+FROM [dbo].[orders]             AS ORD 
+INNER JOIN [dbo].[OrderItems]   AS ORDI
+    ON ORD.ORDER_ID = ORDI.ORDER_ID
+LEFT JOIN [dbo].[Customers]     AS CUST
+    ON ORD.customer_id = CUST.customer_id
+GROUP BY CUST.CUSTOMER_NAME
+ORDER BY ORDER_COUNT DESC,
+         CUSTOMER_NAME ASC
+         
 -- Q2: Products with total_sold column.
+
+SELECT P.product_name           AS PRODUCT_NAME,
+       COUNT(ORDI.quantity)     AS PRODUCT_SOULD
+FROM [dbo].[Products]           AS P 
+LEFT JOIN [dbo].[OrderItems]    AS ORDI
+    ON P.product_id = ORDI.product_id
+GROUP BY P.product_name
+ORDER BY PRODUCT_SOULD DESC,
+         P.product_name ASC
+
 -- Q3: Departments with employee_count column.
+
+SELECT DEPT.dept_name           AS DEPARTMENT_NAME,
+       COUNT(EMP.emp_id)        AS EMPLOYEE_COUNT
+FROM [dbo].[departments]        AS DEPT 
+LEFT JOIN [dbo].[employees]     AS EMP 
+    ON DEPT.dept_id = EMP.dept_id
+GROUP BY DEPT.dept_name
+ORDER BY EMPLOYEE_COUNT DESC,
+         DEPT.dept_name ASC
 
 -- Day 29
 -- Q1: Top 5 customers by spending using subquery in FROM.
