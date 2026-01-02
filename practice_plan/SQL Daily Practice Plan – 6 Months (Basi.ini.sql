@@ -710,25 +710,23 @@ WHERE P1.unit_price >
 -- Q1: Customers with order_count column.
 
 SELECT CUST.CUSTOMER_NAME       AS CUSTOMER_NAME,
-       COUNT(ORDI.QUANTITY)     AS ORDER_COUNT
-FROM [dbo].[orders]             AS ORD 
-INNER JOIN [dbo].[OrderItems]   AS ORDI
-    ON ORD.ORDER_ID = ORDI.ORDER_ID
-LEFT JOIN [dbo].[Customers]     AS CUST
-    ON ORD.customer_id = CUST.customer_id
+       COUNT(ORD.order_id)      AS ORDER_COUNT
+FROM [dbo].[Customers]     AS CUST  
+LEFT JOIN [dbo].[orders]   AS ORD
+    ON CUST.customer_id = ORD.customer_id
 GROUP BY CUST.CUSTOMER_NAME
 ORDER BY ORDER_COUNT DESC,
          CUSTOMER_NAME ASC
          
 -- Q2: Products with total_sold column.
 
-SELECT P.product_name           AS PRODUCT_NAME,
-       COUNT(ORDI.quantity)     AS PRODUCT_SOULD
+SELECT P.product_name                    AS PRODUCT_NAME,
+       ISNULL(SUM(ORDI.quantity), 0)     AS PRODUCT_SOLD
 FROM [dbo].[Products]           AS P 
 LEFT JOIN [dbo].[OrderItems]    AS ORDI
     ON P.product_id = ORDI.product_id
 GROUP BY P.product_name
-ORDER BY PRODUCT_SOULD DESC,
+ORDER BY PRODUCT_SOLD DESC,
          P.product_name ASC
 
 -- Q3: Departments with employee_count column.
